@@ -3,7 +3,6 @@ public class Main
 {
 	public static void main(String[] args) 
 	{
-		//original solution from class
 		int[][] potentialSolution = 
 			{
 					{6, 2, 4, 5, 3, 9, 1, 8, 7},
@@ -16,13 +15,10 @@ public class Main
 					{4, 9, 6, 1, 8, 2, 5, 7, 3},
 					{2, 8, 5, 4, 7, 3, 9, 1, 6}
 			};
-		
 		ValidatorThreads Validator = new ValidatorThreads(potentialSolution);
 		
 		Validator.initializeThreads();
-		
 		Validator.startAllThreads  ();
-		
 		Validator.joinAllThreads   ();
 		
 		if (Validator.allThreadsAreValid())
