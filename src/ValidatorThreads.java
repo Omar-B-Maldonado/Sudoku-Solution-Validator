@@ -5,6 +5,7 @@ public class ValidatorThreads implements Runnable
 	ValidatorThreads[] 	runnableObjects;
 	
 	ValidatorThreads 	allRows, allCols,
+	
 						subgrid0_0, subgrid0_1, subgrid0_2,
 						subgrid1_0 ,subgrid1_1, subgrid1_2,
 						subgrid2_0, subgrid2_1, subgrid2_2;
@@ -13,8 +14,9 @@ public class ValidatorThreads implements Runnable
 	Thread[] threads;
 	int[][] solution;
 	
-	//initialized for each thread
+	//each runnable object is initialized with a purpose
 	String purpose;
+	int subgridRow, subgridCol;
 	
 	//initialized in the run method after threads run 
 	boolean isValid; 		//for tracking the validity of each thread individually
@@ -27,11 +29,21 @@ public class ValidatorThreads implements Runnable
 		this.solution    = solution;
 	}
 	
-	//constructor for the 11 threads within this class
-	public ValidatorThreads(String purpose, int[][]solution)
+	//constructor for the row and col threads
+		public ValidatorThreads(String purpose, int[][]solution)
+		{
+			this.solution = solution;
+			this.purpose  = purpose;
+			this.containsNum = new boolean[9];
+		}
+	
+	//constructor for the 9 subgrid threads within the class
+	public ValidatorThreads(String purpose, int subgridRow, int subgridCol, int[][]solution)
 	{
 		this.solution = solution;
 		this.purpose  = purpose;
+		this.subgridRow = subgridRow;
+		this.subgridCol = subgridCol;
 		this.containsNum = new boolean[9];
 	}
 	
@@ -40,52 +52,46 @@ public class ValidatorThreads implements Runnable
 		runnableObjects = new ValidatorThreads[] 
 		{
 			//instantiate runnable objects of this class with their thread's purposes and the solution that was given in our main method
-			allRows    = new ValidatorThreads("validate all rows"      , solution),
-			allCols    = new ValidatorThreads("validate all cols"      , solution),
+			allRows    = new ValidatorThreads("check all rows", solution),
+			allCols    = new ValidatorThreads("check all cols", solution),
 			
-			subgrid0_0 = new ValidatorThreads("validate subgrid (0, 0)", solution),
-			subgrid0_1 = new ValidatorThreads("validate subgrid (0, 1)", solution),
-			subgrid0_2 = new ValidatorThreads("validate subgrid (0, 2)", solution),
+			subgrid0_0 = new ValidatorThreads("check subgrid", 0, 0, solution),
+			subgrid0_1 = new ValidatorThreads("check subgrid", 0, 1, solution),
+			subgrid0_2 = new ValidatorThreads("check subgrid", 0, 2, solution),
 			
-			subgrid1_0 = new ValidatorThreads("validate subgrid (1, 0)", solution),
-			subgrid1_1 = new ValidatorThreads("validate subgrid (1, 1)", solution),
-			subgrid1_2 = new ValidatorThreads("validate subgrid (1, 2)", solution),
+			subgrid1_0 = new ValidatorThreads("check subgrid", 1, 0, solution),
+			subgrid1_1 = new ValidatorThreads("check subgrid", 1, 1, solution),
+			subgrid1_2 = new ValidatorThreads("check subgrid", 1, 2, solution),
 			
-			subgrid2_0 = new ValidatorThreads("validate subgrid (2, 0)", solution),
-			subgrid2_1 = new ValidatorThreads("validate subgrid (2, 1)", solution),
-			subgrid2_2 = new ValidatorThreads("validate subgrid (2, 2)", solution)
+			subgrid2_0 = new ValidatorThreads("check subgrid", 2, 0, solution),
+			subgrid2_1 = new ValidatorThreads("check subgrid", 2, 1, solution),
+			subgrid2_2 = new ValidatorThreads("check subgrid", 2, 2, solution)
 		};
-		//-----------------------------------------------------------
-		
-		threads = new Thread[] {
-			//initialize threads with the above runnable objects
-			
-			new Thread(allRows), new Thread(allCols),
-			
-			new Thread(subgrid0_0), new Thread(subgrid0_1), new Thread(subgrid0_2),
-			
-			new Thread(subgrid1_0), new Thread(subgrid1_1), new Thread(subgrid1_2),
-			
+		//create threads with the above runnable objects
+		threads = new Thread[] 
+		{	
+			new Thread(allRows),    new Thread(allCols),
+			new Thread(subgrid0_0), new Thread(subgrid0_1), new Thread(subgrid0_2),	
+			new Thread(subgrid1_0), new Thread(subgrid1_1), new Thread(subgrid1_2),	
 			new Thread(subgrid2_0), new Thread(subgrid2_1), new Thread(subgrid2_2),
 		};
 	}
 	
 	public void startAllThreads()
 	{
-		try
+		for (Thread t : threads)
 		{
-			for (Thread t : threads) t.start();
+			try 				{t.start();          }
+			catch (Exception e) {e.printStackTrace();}
 		}
-		catch (Exception e) {e.printStackTrace();}
 	}
-	
 	public void joinAllThreads()
 	{
-		try
+		for (Thread t : threads)
 		{
-			for (Thread t : threads) t.join(); //wait for all threads to terminate
-		} 
-		catch (Exception e) {e.printStackTrace();}
+			try 				{t.join();           } //wait for all threads to terminate
+			catch (Exception e) {e.printStackTrace();}
+		}
 	}
 	
 	public boolean allThreadsAreValid()
@@ -130,7 +136,7 @@ public class ValidatorThreads implements Runnable
 	public boolean isValidRow(int row, int[][] solution)
 	{	
 		//freeze the row and check all columns in that row
-		for (int col = 0; col < solution[0].length; col++)
+		for (int col = 0; col < solution.length; col++)
 		{
 			for (int i = 1; i <= 9; i++)
 			{
@@ -143,7 +149,7 @@ public class ValidatorThreads implements Runnable
 	public boolean isValidCol(int col, int[][] solution)
 	{
 		//freeze the column and check all rows in that column
-		for (int row = 0; row < solution.length; row++)
+		for (int row = 0; row < solution[0].length; row++)
 		{
 			for (int i = 1; i <= 9; i++)
 			{
@@ -171,57 +177,13 @@ public class ValidatorThreads implements Runnable
 	{
 		/*				EACH THREAD HAS ITS OWN RUN CONDITION			   */
 		
-		//------------------------ ROWS AND COLS ----------------------------
-		if (purpose.equals("validate all rows"))
-		{
-			if (allRowsValid(solution)) this.isValid = true;
-		}
-		if(purpose.equals("validate all cols"))
-		{
-			if (allColsValid(solution)) this.isValid = true; 
-		}
-		//-------------------------- TOP 3 SUBGRIDS -------------------------
+		if (purpose.equals("check all rows")) this.isValid = allRowsValid(solution);
 		
-		if(purpose.equals("validate subgrid (0, 0)"))
-		{
-			if (isValidSubgrid(0, 0, solution)) this.isValid = true;
-		}
-		if(purpose.equals("validate subgrid (0, 1)"))
-		{
-			if (isValidSubgrid(0, 1, solution)) this.isValid = true;
-		}
-		if(purpose.equals("validate subgrid (0, 2)"))
-		{
-			if (isValidSubgrid(0, 2, solution)) this.isValid = true;
-		}
-		//------------------------ MIDDLE 3 SUBGRIDS -------------------------
+		if (purpose.equals("check all cols")) this.isValid = allColsValid(solution); 
 		
-		if(purpose.equals("validate subgrid (1, 0)"))
+		if (purpose.equals("check subgrid"))
 		{
-			if (isValidSubgrid(1, 0, solution)) this.isValid = true;
+			this.isValid = isValidSubgrid(this.subgridRow, this.subgridCol, solution);
 		}
-		if(purpose.equals("validate subgrid (1, 1)"))
-		{
-			if (isValidSubgrid(1, 1, solution)) this.isValid = true;
-		}
-		if(purpose.equals("validate subgrid (1, 2)"))
-		{
-			if (isValidSubgrid(1, 2, solution)) this.isValid = true;
-		}
-		//------------------------ BOTTOM 3 SUBGRIDS ------------------------
-		
-		if(purpose.equals("validate subgrid (2, 0)"))
-		{
-			if (isValidSubgrid(2, 0, solution)) this.isValid = true;
-		}
-		if(purpose.equals("validate subgrid (2, 1)"))
-		{
-			if (isValidSubgrid(2, 1, solution)) this.isValid = true;
-		}
-		if(this.purpose.equals("validate subgrid (2, 2)"))
-		{
-			if (isValidSubgrid(2, 2, solution)) this.isValid = true;
-		}
-		//-------------------------------------------------------------------	
 	}
 }
