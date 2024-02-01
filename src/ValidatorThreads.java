@@ -5,9 +5,9 @@ public class ValidatorThreads implements Runnable
 	
 	ValidatorThreads 	allRows, allCols,
 	
-						subgrid0_0, subgrid0_1, subgrid0_2,
-						subgrid1_0 ,subgrid1_1, subgrid1_2,
-						subgrid2_0, subgrid2_1, subgrid2_2;
+				subgrid0_0, subgrid0_1, subgrid0_2,
+				subgrid1_0 ,subgrid1_1, subgrid1_2,
+				subgrid2_0, subgrid2_1, subgrid2_2;
 	
 	Thread[] threads; //to hold our 11 threads
 	
@@ -24,7 +24,6 @@ public class ValidatorThreads implements Runnable
 	/* each thread must check if every number from 1-9 *
 	 * is contained in its row or col or subgrid 	   */
 	boolean[] containsNum;
-	//
 	
 	//constructor for this class to validate a particular solution in the main method
 	public ValidatorThreads(int[][]solution)
@@ -33,12 +32,12 @@ public class ValidatorThreads implements Runnable
 	}
 	
 	//constructor for the row and col threads
-		public ValidatorThreads(String purpose, int[][]solution)
-		{
-			this.solution = solution;
-			this.purpose  = purpose;
-			this.containsNum = new boolean[9];
-		}
+	public ValidatorThreads(String purpose, int[][]solution)
+	{
+		this.solution = solution;
+		this.purpose  = purpose;
+		this.containsNum = new boolean[9];
+	}
 	
 	//constructor for the 9 subgrid threads within the class
 	public ValidatorThreads(String purpose, int subgridRow, int subgridCol, int[][]solution)
