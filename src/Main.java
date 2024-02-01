@@ -21,11 +21,11 @@ public class Main
 		Validator.startAllThreads  ();
 		Validator.joinAllThreads   ();
 		
-		if (Validator.allThreadsAreValid())
+		if (Validator.allThreadsReturnedValid())
 		{
 			System.out.println("Yes, your solution to the Sudoku puzzle is valid! Good job!");
 		}	
-		else //if at least 1 thread is not valid
+		else //if 1 or more threads returned invalid
 		{
 			System.out.println("Your solution to the Sudoku puzzle is not valid! Please try again with a different solution this time.");
 		}

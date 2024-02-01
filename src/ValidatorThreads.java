@@ -1,7 +1,6 @@
 
 public class ValidatorThreads implements Runnable
 {	
-	//------------ (RUNNABLE) INSTANCES OF THIS CLASS ----------
 	ValidatorThreads[] 	runnableObjects;
 	
 	ValidatorThreads 	allRows, allCols,
@@ -10,18 +9,22 @@ public class ValidatorThreads implements Runnable
 						subgrid1_0 ,subgrid1_1, subgrid1_2,
 						subgrid2_0, subgrid2_1, subgrid2_2;
 	
-	//----------------------------------------------------------
-	Thread[] threads;
+	Thread[] threads; //to hold our 11 threads
+	
 	int[][] solution;
 	
-	//each runnable object is initialized with a purpose
+	/* each runnable object is initialized with a purpose for validity-checking a specific area */
 	String purpose;
-	int subgridRow, subgridCol;
 	
-	//initialized in the run method after threads run 
-	boolean isValid; 		//for tracking the validity of each thread individually
-	boolean[] containsNum; 	//for checking if each number is contained in each row/col/subgrid
-	//----------------------------------------------------------
+	int subgridRow, subgridCol; //for specifying the subgrid in question when this class' purpose is to validate a subgrid
+	
+	/* for individually tracking the validity of each thread's run condition */
+	boolean isValid;
+	
+	/* each thread must check if every number from 1-9 *
+	 * is contained in its row or col or subgrid 	   */
+	boolean[] containsNum;
+	//
 	
 	//constructor for this class to validate a particular solution in the main method
 	public ValidatorThreads(int[][]solution)
@@ -94,7 +97,7 @@ public class ValidatorThreads implements Runnable
 		}
 	}
 	
-	public boolean allThreadsAreValid()
+	public boolean allThreadsReturnedValid()
 	{
 		for (ValidatorThreads obj : runnableObjects) if (!obj.isValid) return false;
 		
@@ -177,11 +180,11 @@ public class ValidatorThreads implements Runnable
 	{
 		/*				EACH THREAD HAS ITS OWN RUN CONDITION			   */
 		
-		if (purpose.equals("check all rows")) this.isValid = allRowsValid(solution);
+		     if (purpose.equals("check all rows")) this.isValid = allRowsValid(solution);
 		
-		if (purpose.equals("check all cols")) this.isValid = allColsValid(solution); 
+		else if (purpose.equals("check all cols")) this.isValid = allColsValid(solution); 
 		
-		if (purpose.equals("check subgrid"))
+		else if (purpose.equals("check subgrid"))
 		{
 			this.isValid = isValidSubgrid(this.subgridRow, this.subgridCol, solution);
 		}
