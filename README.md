@@ -10,7 +10,7 @@ To validate a solution, simply change the potentialSolution variable inside the 
         the potential Sudoku solution's validation process:
   
   			* allRows purpose -> checking the validity of all rows collectively
- 			  * allCols purpose -> checking the validity of all cols collectively
+ 			 * allCols purpose -> checking the validity of all cols collectively
   			* purpose of each subgrid object -> checking the validity of the specified subgrid
   
   2) Call startAllThreads() on the instance
