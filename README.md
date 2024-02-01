@@ -8,10 +8,10 @@ To validate a solution, simply change the potentialSolution variable inside the 
       * The instance will then create 11 threads, each of which is passed a unique 
         runnable ValidatorThreads object that has a specific purpose in
         the potential Sudoku solution's validation process:
-  
-  			* allRows purpose -> checking the validity of all rows collectively
- 			* allCols purpose -> checking the validity of all cols collectively
-  			* purpose of each subgrid object -> checking the validity of the specified subgrid
+
+        * allRows purpose -> checking the validity of all rows collectively
+        * allCols purpose -> checking the validity of all cols collectively
+        * purpose of each subgrid object -> checking the validity of the specified subgrid
   
   2) Call startAllThreads() on the instance
    
