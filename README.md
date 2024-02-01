@@ -19,14 +19,15 @@ To validate a solution, simply change the potentialSolution variable inside the 
    
         Each thread will use the same run method, which:
     
-     		a) calls a specific validating method based on the purpose of its runnable
-     		b) stores the method's returned boolean value in its runnable's validity variable.
+        a) calls a specific validating method based on the purpose of its runnable
+
+        b) stores the method's returned boolean value in its runnable's validity variable.
   
-  3) Calls joinAllThreads() on the instance
+  4) Calls joinAllThreads() on the instance
   	  
        * This waits until each thread terminates to ensure the next step evaluates without flaw
   
-  4) Calls allThreadsReturnedValid() on the instance
+  5) Calls allThreadsReturnedValid() on the instance
   
        * Each runnable object's validity value will be checked.
        * Returns true if all are valid, false otherwise
