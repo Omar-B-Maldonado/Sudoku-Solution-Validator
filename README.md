@@ -29,4 +29,5 @@ To validate a solution, simply change the potentialSolution variable inside the 
        * Each runnable object's validity value will be checked.
        * Returns true if all are valid, false otherwise
   		
-(The output in the main method is then printed based on the returned value of this call)
+(The output value of this call is then printed used to
+print information regarding the solution's validity to the console.)
