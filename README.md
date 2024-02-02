@@ -1,5 +1,6 @@
-To validate a solution, simply change the potentialSolution variable inside the main method
-(while matching the formatting) and run the code in your IDE.
+To validate a solution, simply change the potentialSolution variable 
+inside the Main class (while matching the formatting)
+and run the code in your IDE.
 
  *Explanation of how ValidatorThreads works via the main method*
  
