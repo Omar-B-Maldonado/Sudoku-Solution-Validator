@@ -22,7 +22,7 @@ and run the code in your IDE.
     
         a) calls a specific validating method based on the purpose of its runnable
 
-        b) stores the method's returned boolean value in its runnable's validity variable.
+        b) stores the method's returned boolean value in its runnable's isValid variable.
   
   4) Calls joinAllThreads() on the instance
   	  
@@ -30,8 +30,9 @@ and run the code in your IDE.
   
   5) Calls allThreadsReturnedValid() on the instance
   
-       * Each runnable object's validity value will be checked.
-       * Returns true if all are valid, false otherwise
+     Each runnable object's isValid value will be checked. The method call:
+       * Returns false if any isValid value is false, 
+       * Returns true otherwise
   		
-The output value of this call is then printed used to
+The output value of this call is then used to
 print information regarding the solution's validity to the console.
